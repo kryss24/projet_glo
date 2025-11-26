@@ -1,0 +1,51 @@
+<div class="field-list-container">
+  <h2 class="text-2xl font-bold mb-4">Catalogue des Filières Académiques</h2>
+
+  <div class="filter-section">
+    <input type="text" [formControl]="searchControl" placeholder="Rechercher par nom, description, compétences..." class="search-input">
+    
+    <select [formControl]="durationFilterControl" class="filter-select">
+      <option value="">Filtrer par Durée</option>
+      <option value="3">3 Ans</option>
+      <option value="4">4 Ans</option>
+      <option value="5">5 Ans</option>
+    </select>
+    <!-- Add more filter options here (e.g., by city, institution type) -->
+  </div>
+
+  <div *ngIf="loading" class="text-center">
+    <p>Chargement des filières...</p>
+  </div>
+
+  <div *ngIf="error" class="text-red-500 text-center">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && fields.length > 0">
+    <div *ngFor="let field of fields" class="field-card">
+      <button 
+        *ngIf="authService.isAuthenticatedSubject.value" 
+        (click)="toggleFavorite(field)" 
+        class="favorite-button"
+        [class.favorited]="field.isFavorited">
+        {{ field.isFavorited ? '❤️' : '🤍' }}
+      </button>
+      <h3>{{ field.name }}</h3>
+      <p>{{ field.description | slice:0:150 }}...</p>
+      <p><strong>Durée:</strong> {{ field.duration_years }} ans</p>
+      <p><strong>Compétences requises:</strong> {{ field.required_skills.join(', ') }}</p>
+      <p><strong>Débouchés:</strong> {{ field.career_opportunities.join(', ') }}</p>
+      <a [routerLink]="['/catalog', field.id]">Voir détails</a>
+    </div>
+
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
+      <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && fields.length === 0 && !error" class="text-center">
+    <p>Aucune filière trouvée.</p>
+  </div>
+</div>

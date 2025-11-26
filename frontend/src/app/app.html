@@ -1,0 +1,20 @@
+<header class="app-header">
+    <nav>
+        <a routerLink="/" class="logo">ENSPD Orientation</a>
+        <div class="nav-links">
+            <a routerLink="/catalog">Catalogue</a>
+            <a routerLink="/student">Espace Étudiant</a>
+            <a routerLink="/admin">Admin</a>
+            <a routerLink="/auth/login">Connexion</a>
+            <a routerLink="/auth/register">Inscription</a>
+        </div>
+    </nav>
+</header>
+
+<main class="app-main">
+    <router-outlet></router-outlet>
+</main>
+
+<footer class="app-footer">
+    <p>&copy; {{ currentYear }} ENSPD Orientation. Tous droits réservés.</p>
+</footer>

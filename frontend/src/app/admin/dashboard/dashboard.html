@@ -1,0 +1,48 @@
+<div class="admin-dashboard-container">
+  <div class="dashboard-header">
+    <h2>Tableau de Bord Administrateur</h2>
+    <p>Vue d'ensemble et gestion de l'application.</p>
+  </div>
+
+  <div *ngIf="loading">
+    <p class="text-center">Chargement des statistiques...</p>
+  </div>
+
+  <div *ngIf="error">
+    <p class="error-message">{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error && stats">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Utilisateurs</h3>
+        <p>{{ stats.total_users }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Tests Complétés</h3>
+        <p>{{ stats.total_tests_completed }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Filières Académiques</h3>
+        <p>{{ stats.total_academic_fields }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Établissements</h3>
+        <p>{{ stats.total_institutions }}</p>
+      </div>
+      <!-- Add more stat cards as needed -->
+    </div>
+
+    <h3 class="text-center mt-5 mb-3">Gestion de l'Application</h3>
+    <div class="management-links">
+      <a routerLink="/admin/users">Gérer les Utilisateurs</a>
+      <a routerLink="/admin/fields">Gérer les Filières</a>
+      <a routerLink="/admin/institutions">Gérer les Établissements</a>
+      <!-- Add other admin links -->
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !stats && !error" class="text-center">
+    <p>Aucune statistique disponible.</p>
+  </div>
+</div>

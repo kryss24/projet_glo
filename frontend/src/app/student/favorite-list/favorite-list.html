@@ -1,0 +1,25 @@
+<div class="favorite-list-container">
+  <h2 class="text-2xl font-bold mb-4">Mes Filières Favorites</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <p>Chargement de vos favoris...</p>
+  </div>
+
+  <div *ngIf="error" class="text-red-500 text-center">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && favorites.length > 0">
+    <div *ngFor="let favorite of favorites" class="favorite-card">
+      <h3>
+        <a [routerLink]="['/catalog', favorite.field]">{{ favorite.field_name }}</a>
+      </h3>
+      <button (click)="removeFavorite(favorite.id)" class="remove-button">Retirer</button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && favorites.length === 0 && !error" class="text-center">
+    <p>Vous n'avez pas encore de filières favorites.</p>
+    <p><a routerLink="/catalog">Parcourir le catalogue</a> pour ajouter des favoris.</p>
+  </div>
+</div>

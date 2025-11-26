@@ -1,0 +1,54 @@
+<div class="field-detail-container">
+  <div *ngIf="loading" class="text-center">
+    <p>Chargement des détails de la filière...</p>
+  </div>
+
+  <div *ngIf="error" class="text-red-500 text-center">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="field && !loading">
+    <div class="field-header">
+      <h2>{{ field.name }}</h2>
+      <button 
+        *ngIf="authService.isAuthenticatedSubject.value" 
+        (click)="toggleFavorite()" 
+        class="favorite-button"
+        [class.favorited]="field.isFavorited">
+        {{ field.isFavorited ? '❤️' : '🤍' }}
+      </button>
+    </div>
+
+    <div class="field-info">
+      <p><strong>Description:</strong> {{ field.description }}</p>
+      <p><strong>Durée d'études:</strong> {{ field.duration_years }} ans</p>
+      <p><strong>Débouchés professionnels:</strong>
+        <span *ngFor="let career of field.career_opportunities; let i = index">
+          {{ career }}{{ i < field.career_opportunities.length - 1 ? ', ' : '' }}
+        </span>
+      </p>
+      <p><strong>Compétences requises:</strong>
+        <span *ngFor="let skill of field.required_skills; let i = index">
+          {{ skill }}{{ i < field.required_skills.length - 1 ? ', ' : '' }}
+        </span>
+      </p>
+      <p *ngIf="field.admission_criteria"><strong>Critères d'admission:</strong> {{ field.admission_criteria }}</p>
+      <p *ngIf="field.tuition_fees_min && field.tuition_fees_max">
+        <strong>Frais de scolarité:</strong> {{ field.tuition_fees_min }} - {{ field.tuition_fees_max }} XAF
+      </p>
+    </div>
+
+    <h3 class="mt-4 mb-3">Établissements proposant cette formation:</h3>
+    <div *ngIf="field.institutions && field.institutions.length > 0">
+      <div *ngFor="let institution of field.institutions" class="institution-card">
+        <h4>{{ institution.name }}</h4>
+        <p><strong>Ville:</strong> {{ institution.city }}</p>
+        <p><strong>Type:</strong> {{ institution.type === 'public' ? 'Public' : 'Privé' }}</p>
+        <p *ngIf="institution.description"><strong>Description:</strong> {{ institution.description }}</p>
+      </div>
+    </div>
+    <div *ngIf="!field.institutions || field.institutions.length === 0">
+      <p>Aucun établissement listé pour cette filière pour le moment.</p>
+    </div>
+  </div>
+</div>

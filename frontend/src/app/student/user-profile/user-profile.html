@@ -1,0 +1,26 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>Mon Profil</h2>
+  </div>
+
+  <div *ngIf="loading">
+    <p>Chargement du profil...</p>
+  </div>
+
+  <div *ngIf="error">
+    <p class="error-message">{{ error }}</p>
+  </div>
+
+  <div *ngIf="user && !loading">
+    <div class="profile-info">
+      <p><strong>Nom d'utilisateur:</strong> {{ user.username }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Prénom:</strong> {{ user.first_name }}</p>
+      <p><strong>Nom:</strong> {{ user.last_name }}</p>
+      <p><strong>Rôle:</strong> {{ user.role }}</p>
+      <!-- Add other student_profile fields here if available -->
+    </div>
+    <!-- Add an edit button or form here later -->
+    <!-- <button>Modifier le Profil</button> -->
+  </div>
+</div>

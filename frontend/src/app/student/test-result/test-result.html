@@ -1,0 +1,55 @@
+<div class="result-container">
+  <div *ngIf="loading" class="text-center">
+    <p>Chargement des résultats du test...</p>
+  </div>
+
+  <div *ngIf="error" class="text-red-500 text-center">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && testResult">
+    <div class="result-header">
+      <h2>Résultats de votre Test d'Orientation</h2>
+      <p>Test complété le: {{ testResult.completed_at | date:'medium' }}</p>
+    </div>
+
+    <div *ngIf="testResult.scores_data" class="score-section">
+      <h3>Vos Scores par Domaine:</h3>
+      <div *ngFor="let score of testResult.scores_data | keyvalue" class="score-item">
+        <strong>{{ score.key | titlecase }}:</strong> {{ (score.value * 100).toFixed(0) }}%
+        <div class="compatibility-bar">
+          <div class="compatibility-fill" [style.width.%]="score.value * 100"></div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="recommendation" class="recommendation-section">
+      <h3>Nos Recommandations pour vous:</h3>
+      <p>{{ recommendation.justification }}</p>
+
+      <div *ngIf="recommendedFields.length > 0">
+        <div *ngFor="let field of recommendedFields" class="recommended-field-item">
+          <strong>
+            <a [routerLink]="['/catalog', field.id]">{{ field.name }}</a>:
+          </strong> 
+          {{ recommendation.compatibility_scores[field.id] ? (recommendation.compatibility_scores[field.id] | number:'1.0-0') + '%' : 'N/A' }} de compatibilité
+          <div class="compatibility-bar">
+            <div 
+              class="compatibility-fill" 
+              [style.width.%]="recommendation.compatibility_scores[field.id]"
+              [style.backgroundColor]="recommendation.compatibility_scores[field.id] > 75 ? 'var(--color-primary)' : recommendation.compatibility_scores[field.id] > 50 ? 'var(--color-secondary)' : 'var(--color-accent)'"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="recommendedFields.length === 0" class="no-results">
+        <p>Aucune filière recommandée pour le moment.</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !testResult && !error" class="no-results">
+    <p>Aucun résultat de test trouvé.</p>
+    <p><a routerLink="/student/test">Passez un nouveau test d'orientation</a></p>
+  </div>
+</div>

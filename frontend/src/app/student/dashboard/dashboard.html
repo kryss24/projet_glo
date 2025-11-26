@@ -1,0 +1,53 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2>Bienvenue sur votre Tableau de Bord, {{ user?.first_name || user?.username }}!</h2>
+    <p>Gérez votre orientation académique.</p>
+  </div>
+
+  <div *ngIf="loading">
+    <p class="text-center">Chargement de votre tableau de bord...</p>
+  </div>
+
+  <div *ngIf="error">
+    <p class="error-message">{{ error }}</p>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <div class="dashboard-sections">
+      <!-- Section: Test d'Orientation -->
+      <div class="section-card">
+        <h3>Test d'Orientation</h3>
+        <p *ngIf="latestTest && latestTest.is_completed">Votre dernier test a été complété le {{ latestTest.completed_at | date:'shortDate' }}.</p>
+        <p *ngIf="!latestTest">Vous n'avez pas encore passé de test d'orientation.</p>
+        <button (click)="startNewTest()">{{ latestTest ? 'Refaire le test' : 'Commencer le test' }}</button>
+        <button *ngIf="latestTest && latestTest.is_completed" (click)="viewLatestResult()">Voir les derniers résultats</button>
+      </div>
+
+      <!-- Section: Mon Profil -->
+      <div class="section-card">
+        <h3>Mon Profil</h3>
+        <p>Consultez et mettez à jour vos informations personnelles.</p>
+        <a routerLink="/student/profile">Voir mon profil</a>
+      </div>
+
+      <!-- Section: Mes Favoris -->
+      <div class="section-card">
+        <h3>Mes Filières Favorites</h3>
+        <p>Retrouvez toutes les filières que vous avez aimées.</p>
+        <a routerLink="/student/favorites">Voir mes favoris</a>
+      </div>
+    </div>
+
+    <!-- Section: Historique des Tests -->
+    <div class="score-section mt-8">
+      <h3>Historique de mes Tests</h3>
+      <ul *ngIf="pastTests.length > 0" class="test-list">
+        <li *ngFor="let test of pastTests">
+          <span>Test du {{ test.started_at | date:'medium' }}</span>
+          <a [routerLink]="['/student/test-result', test.id]">Voir les résultats</a>
+        </li>
+      </ul>
+      <p *ngIf="pastTests.length === 0">Aucun historique de test.</p>
+    </div>
+  </div>
+</div>

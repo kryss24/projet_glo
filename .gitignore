@@ -1,0 +1,125 @@
+# =====================================================
+# GLOBAL / OS
+# =====================================================
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+*.bak
+
+# =====================================================
+# ENVIRONNEMENT / SECRETS
+# =====================================================
+.env
+.env.*
+*.env
+!.env.example
+secret.key
+
+# Pyenv
+.python-version
+
+# =====================================================
+# PYTHON / DJANGO
+# =====================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+develop-eggs/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Static files collectés par Django
+staticfiles/
+static/
+
+# Django migrations (NE SURTOUT PAS SUPPRIMER LES .py)
+**/migrations/*.pyc
+**/migrations/*.py~
+**/migrations/__pycache__/
+# Garder les migrations .py :
+!**/migrations/__init__.py
+
+# Tests / Coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+.pytest_cache/
+test-results/
+
+# Environnements virtuels Python
+venv/
+env/
+ENV/
+.venv/
+
+# =====================================================
+# NODE / ANGULAR
+# =====================================================
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# Environment Angular
+src/environments/environment.ts
+src/environments/environment.prod.ts
+
+# (Optionnel) Exemple d'env Angular
+!src/environments/environment.example.ts
+
+# Build Angular
+dist/
+dist/*
+
+# Angular cache
+.angular/
+.angular/cache/
+
+# Compiled output
+*.js.map
+*.js.gz
+*.css.map
+
+# IDE
+.vscode/
+.idea/
+
+# =====================================================
+# BACKUPS / MISC
+# =====================================================
+*.zip
+*.rar
+*.7z
+
