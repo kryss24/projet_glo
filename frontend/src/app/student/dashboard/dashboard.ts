@@ -85,6 +85,24 @@ import { Observable } from 'rxjs';
     .test-list li a:hover {
       text-decoration: underline;
     }
+    .error-message {
+      color: #dc3545;
+      background: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 1rem;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .mt-8 {
+      margin-top: 2rem;
+    }
+    .score-section h3 {
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+    }
   `,
 })
 export class Dashboard implements OnInit {
@@ -104,30 +122,47 @@ export class Dashboard implements OnInit {
       this.router.navigate(['/auth/login']);
       return;
     }
+    
     this.authService.getUserProfile().subscribe({
       next: (userProfile) => {
         this.user = userProfile;
         this.loadStudentData();
       },
       error: (err) => {
-        this.error = 'Failed to load user profile.';
+        console.error('Error loading user profile:', err);
+        this.error = 'Impossible de charger votre profil.';
         this.loading = false;
-        console.error(err);
       }
     });
   }
 
   loadStudentData(): void {
     this.orientationService.getUserTests().subscribe({
-      next: (response: PaginatedResponse<BackendOrientationTest>) => {
-        this.pastTests = response.results;
+      next: (response: PaginatedResponse<BackendOrientationTest> | BackendOrientationTest[]) => {
+        console.log('getUserTests response:', response);
+        
+        // Gérer les deux formats possibles de réponse
+        if (Array.isArray(response)) {
+          // Si la réponse est directement un tableau
+          this.pastTests = response;
+        } else if (response && response.results) {
+          // Si la réponse est paginée avec un objet contenant 'results'
+          this.pastTests = response.results;
+        } else {
+          // Sinon, initialiser un tableau vide
+          console.warn('Unexpected response format:', response);
+          this.pastTests = [];
+        }
+        
+        // Trouver le test le plus récent complété
         this.latestTest = this.pastTests.length > 0 ? this.pastTests[0] : null;
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load past tests.';
+        console.error('Error loading past tests:', err);
+        this.error = 'Impossible de charger l\'historique de vos tests.';
+        this.pastTests = [];
         this.loading = false;
-        console.error(err);
       }
     });
   }

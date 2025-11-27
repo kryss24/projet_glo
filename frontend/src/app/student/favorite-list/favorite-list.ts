@@ -2,12 +2,15 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { CatalogService, Favorite, PaginatedResponse } from '../../catalog/catalog.service';
 import { AuthService } from '../../auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-favorite-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterModule
+  ],
   templateUrl: './favorite-list.html',
   styles: `
     .favorite-list-container {

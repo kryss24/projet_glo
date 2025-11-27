@@ -80,7 +80,7 @@ export class OrientationService {
     return this.http.get<OrientationTest>(`${this.API_BASE_URL}tests/${testId}/result/`);
   }
 
-  getUserTests(): Observable<PaginatedResponse<OrientationTest>> {
-    return this.http.get<PaginatedResponse<OrientationTest>>(`${this.API_BASE_URL}my-tests/`);
+  getUserTests(): Observable<PaginatedResponse<OrientationTest> | OrientationTest[]> {
+    return this.http.get<PaginatedResponse<OrientationTest> | OrientationTest[]>(`${this.API_BASE_URL}my-tests/`);
   }
 }
