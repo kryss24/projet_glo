@@ -29,6 +29,8 @@ DEBUG = True
 FRONTEND_URL = 'http://localhost:4200' # Default for local Angular dev
 
 ALLOWED_HOSTS = ['*']
+IS_RENDER = os.getenv("RENDER", False)
+
 
 
 # Application definition
@@ -201,9 +203,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         },
         'simple': {
@@ -211,55 +214,18 @@ LOGGING = {
             'style': '{',
         },
     },
+
     'handlers': {
         'console': {
-            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs/django.log',
-            'maxBytes': 1024 * 1024 * 5,  # 5 MB
-            'backupCount': 5,
-            'formatter': 'verbose',
-        },
     },
+
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'accounts': { # Logger for your custom app
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'catalog': { # Logger for your custom app
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'orientation': { # Logger for your custom app
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'drf_spectacular': {
             'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': False,
+            'level': 'INFO',
         },
-    },
-    'root': {
-        'handlers': ['console', 'file'],
-        'level': 'DEBUG',
     },
 }
