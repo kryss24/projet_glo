@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-gi$eim$t(t2a*0&j2paw&$p!lc)ga$6vz#f$yjtyncr17*6a&@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-FRONTEND_URL = 'http://localhost:4200' # Default for local Angular dev
+FRONTEND_URL = 'https://projet-glo.vercel.app' # Default for local Angular dev
 
 ALLOWED_HOSTS = ['*']
 IS_RENDER = os.getenv("RENDER", False)
@@ -120,7 +120,8 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200", # The origin for your Angular app
-    "https://projet-glo.vercel.app"
+    "https://projet-glo.vercel.app",
+    "*"
 ]
 # Or, for more permissive settings during development:
 # CORS_ALLOW_ALL_ORIGINS = True
