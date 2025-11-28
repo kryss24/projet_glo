@@ -28,7 +28,7 @@ DEBUG = True
 
 FRONTEND_URL = 'http://localhost:4200' # Default for local Angular dev
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
