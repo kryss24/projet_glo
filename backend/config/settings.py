@@ -207,7 +207,7 @@ LOGGING = {
 
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
         'simple': {
@@ -219,7 +219,7 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
+            'formatter': 'verbose',  # Changé de 'simple' à 'verbose'
         },
     },
 
@@ -228,5 +228,14 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
+        'django.request': {  # NOUVEAU - pour capturer les erreurs 500
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+    'root': {  # NOUVEAU - pour capturer toutes les erreurs
+        'handlers': ['console'],
+        'level': 'ERROR',
     },
 }
