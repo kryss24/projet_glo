@@ -27,10 +27,11 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private readonly API_BASE_URL = `${BACKEND_API_URL}/accounts/`;
+  private readonly API_BASE_URL = `${BACKEND_API_URL}/accounts`;
 
   public isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidTokens());
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+
   public user: User | null = null;
 
   constructor() {
@@ -79,13 +80,12 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
-
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.API_BASE_URL}register/`, userData);
+    return this.http.post(`${this.API_BASE_URL}/register/`, userData);
   }
 
   login(credentials: any): Observable<AuthTokens> {
-    return this.http.post<AuthTokens>(`${this.API_BASE_URL}token/`, credentials).pipe(
+    return this.http.post<AuthTokens>(`${this.API_BASE_URL}/token/`, credentials).pipe(
       tap(tokens => this.saveTokens(tokens))
     );
   }
@@ -96,21 +96,20 @@ export class AuthService {
       this.logout();
       return new Observable(observer => observer.error('No refresh token available.'));
     }
-    return this.http.post<AuthTokens>(`${this.API_BASE_URL}token/refresh/`, { refresh: refreshToken }).pipe(
+    return this.http.post<AuthTokens>(`${this.API_BASE_URL}/token/refresh/`, { refresh: refreshToken }).pipe(
       tap(tokens => this.saveTokens(tokens))
     );
   }
 
   requestPasswordReset(email: string): Observable<any> {
-    return this.http.post(`${this.API_BASE_URL}password-reset/`, { email });
+    return this.http.post(`${this.API_BASE_URL}/password-reset/`, { email });
   }
 
   confirmPasswordReset(data: any): Observable<any> {
-    return this.http.post(`${this.API_BASE_URL}password-reset/confirm/`, data);
+    return this.http.post(`${this.API_BASE_URL}/password-reset/confirm/`, data);
   }
 
   getUserProfile(): Observable<User> {
-    // You'll need an interceptor to attach the access token to this request
-    return this.http.get<User>(`${this.API_BASE_URL}profile/`);
+    return this.http.get<User>(`${this.API_BASE_URL}/profile/`);
   }
 }

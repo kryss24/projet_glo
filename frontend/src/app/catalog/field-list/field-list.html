@@ -1,51 +1,117 @@
 <div class="field-list-container">
-  <h2 class="text-2xl font-bold mb-4">Catalogue des Filières Académiques</h2>
+  <!-- Page Header -->
+  <div class="page-header">
+    <h2>Catalogue des Filières Académiques</h2>
+    <p>Explorez et découvrez les formations qui correspondent à vos aspirations</p>
+  </div>
 
+  <!-- Filters Section -->
   <div class="filter-section">
-    <input type="text" [formControl]="searchControl" placeholder="Rechercher par nom, description, compétences..." class="search-input">
+    <input 
+      type="text" 
+      [formControl]="searchControl" 
+      placeholder="🔍 Rechercher par nom, description, compétences..." 
+      class="search-input"
+    >
     
     <select [formControl]="durationFilterControl" class="filter-select">
-      <option value="">Filtrer par Durée</option>
+      <option value="">📅 Toutes les durées</option>
       <option value="3">3 Ans</option>
       <option value="4">4 Ans</option>
       <option value="5">5 Ans</option>
+      <option value="6">6+ Ans</option>
     </select>
-    <!-- Add more filter options here (e.g., by city, institution type) -->
   </div>
 
-  <div *ngIf="loading" class="text-center">
-    <p>Chargement des filières...</p>
+  <!-- Results Info -->
+  <div class="results-info" *ngIf="!loading && fields.length > 0">
+    <div class="results-count">
+      <strong>{{ totalItems }}</strong> filière{{ totalItems > 1 ? 's' : '' }} trouvée{{ totalItems > 1 ? 's' : '' }}
+    </div>
   </div>
 
-  <div *ngIf="error" class="text-red-500 text-center">
-    <p>{{ error }}</p>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <p>⏳ Chargement des filières...</p>
   </div>
 
-  <div *ngIf="!loading && fields.length > 0">
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <p>❌ {{ error }}</p>
+  </div>
+
+  <!-- Fields Grid -->
+  <div *ngIf="!loading && fields.length > 0" class="fields-grid">
     <div *ngFor="let field of fields" class="field-card">
+      <!-- Favorite Button -->
       <button 
         *ngIf="authService.isAuthenticatedSubject.value" 
         (click)="toggleFavorite(field)" 
         class="favorite-button"
-        [class.favorited]="field.isFavorited">
+        [class.favorited]="field.isFavorited"
+        [title]="field.isFavorited ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+      >
         {{ field.isFavorited ? '❤️' : '🤍' }}
       </button>
-      <h3>{{ field.name }}</h3>
-      <p>{{ field.description | slice:0:150 }}...</p>
-      <p><strong>Durée:</strong> {{ field.duration_years }} ans</p>
-      <p><strong>Compétences requises:</strong> {{ field.required_skills.join(', ') }}</p>
-      <p><strong>Débouchés:</strong> {{ field.career_opportunities.join(', ') }}</p>
-      <a [routerLink]="['/catalog', field.id]">Voir détails</a>
-    </div>
 
-    <div class="pagination">
-      <button (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
-      <span>Page {{ currentPage }} sur {{ totalPages }}</span>
-      <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+      <!-- Field Title -->
+      <h3>
+        <a [routerLink]="['/catalog', field.id]">{{ field.name }}</a>
+      </h3>
+
+      <!-- Description -->
+      <p class="field-description">
+        {{ field.description.length > 150 ? (field.description | slice:0:150) + '...' : field.description }}
+      </p>
+
+      <!-- Meta Information -->
+      <div class="field-meta">
+        <div class="meta-item">
+          <span class="meta-badge">{{ field.duration_years }} ans</span>
+        </div>
+      </div>
+
+      <!-- Skills Tags -->
+      <div class="field-tags" *ngIf="field.required_skills && field.required_skills.length > 0">
+        <span class="tag" *ngFor="let skill of field.required_skills.slice(0, 3)">
+          {{ skill }}
+        </span>
+        <span class="tag" *ngIf="field.required_skills.length > 3">
+          +{{ field.required_skills.length - 3 }}
+        </span>
+      </div>
+
+      <!-- Career Opportunities -->
+      <div class="field-tags" *ngIf="field.career_opportunities && field.career_opportunities.length > 0">
+        <span class="tag" *ngFor="let career of field.career_opportunities.slice(0, 2)" style="background: #e0f2fe; color: #0369a1;">
+          💼 {{ career }}
+        </span>
+        <span class="tag" *ngIf="field.career_opportunities.length > 2" style="background: #e0f2fe; color: #0369a1;">
+          +{{ field.career_opportunities.length - 2 }}
+        </span>
+      </div>
+
+      <!-- View Details Link -->
+      <a [routerLink]="['/catalog', field.id]" class="view-details-link">
+        Voir les détails
+      </a>
     </div>
   </div>
 
-  <div *ngIf="!loading && fields.length === 0 && !error" class="text-center">
-    <p>Aucune filière trouvée.</p>
+  <!-- Empty State -->
+  <div *ngIf="!loading && fields.length === 0 && !error" class="empty-state">
+    <p>🔍 Aucune filière trouvée</p>
+    <p style="font-size: 0.9rem; color: #9ca3af;">Essayez de modifier vos critères de recherche</p>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && fields.length > 0" class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">
+      ← Précédent
+    </button>
+    <span>Page {{ currentPage }} sur {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Suivant →
+    </button>
   </div>
 </div>

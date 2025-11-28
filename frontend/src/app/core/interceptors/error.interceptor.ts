@@ -1,61 +1,66 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  private router = inject(Router);
+  constructor(private router: Router) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = 'An unknown error occurred!';
-        if (error.error instanceof ErrorEvent) {
-          // Client-side errors
-          errorMessage = `Error: ${error.error.message}`;
-        } else {
-          // Server-side errors
-          if (error.status) {
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-          }
-          if (error.error && error.error.detail) {
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.detail}`;
-          } else if (error.error) {
-            // Handle specific backend validation errors
-            if (typeof error.error === 'object') {
-              let validationMessages: string[] = [];
-              for (const key in error.error) {
-                if (error.error.hasOwnProperty(key)) {
-                  validationMessages.push(`${key}: ${error.error[key]}`);
-                }
-              }
-              errorMessage = `Validation Errors:\n${validationMessages.join('\n')}`;
-            }
-          }
+        let errorMessage = 'Une erreur est survenue';
 
-          // Handle specific HTTP statuses
+        if (error.error instanceof ErrorEvent) {
+          // Erreur côté client
+          console.error('Client-side error:', error.error.message);
+          errorMessage = `Erreur client: ${error.error.message}`;
+        } else {
+          // Erreur côté serveur
+          console.error(`Server-side error: ${error.status}`, error.error);
+          
           switch (error.status) {
-            case 401: // Unauthorized
-              console.error('Unauthorized request. Redirecting to login...');
-              this.router.navigate(['/auth/login']);
+            case 0:
+              errorMessage = 'Impossible de contacter le serveur. Vérifiez votre connexion.';
               break;
-            case 403: // Forbidden
-              console.error('Forbidden access. You do not have permission.');
-              // Maybe redirect to an access denied page
+            case 400:
+              errorMessage = error.error?.message || 'Requête invalide';
               break;
-            case 404: // Not Found
-              console.error('Resource not found.');
+            case 401:
+              // Ne pas gérer le 401 ici, c'est AuthInterceptor qui s'en charge
+              console.log('Unauthorized request. Redirecting to login...');
               break;
-            case 500: // Internal Server Error
-              console.error('Internal server error. Please try again later.');
+            case 403:
+              errorMessage = 'Accès refusé. Vous n\'avez pas les permissions nécessaires.';
               break;
+            case 404:
+              errorMessage = 'Ressource non trouvée';
+              break;
+            case 500:
+              errorMessage = 'Erreur serveur interne';
+              break;
+            case 503:
+              errorMessage = 'Service temporairement indisponible';
+              break;
+            default:
+              errorMessage = error.error?.message || error.message || errorMessage;
           }
         }
-        console.error('HTTP Error caught by interceptor:', error);
-        alert(`Error: ${errorMessage}`); // Simple alert for now
-        return throwError(() => new Error(errorMessage));
+
+        console.error('HTTP Error caught by interceptor:', {
+          status: error.status,
+          message: errorMessage,
+          error: error
+        });
+
+        // Retourner l'erreur avec un message formaté
+        return throwError(() => ({
+          status: error.status,
+          message: errorMessage,
+          originalError: error
+        }));
       })
     );
   }

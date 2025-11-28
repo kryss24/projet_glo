@@ -5,7 +5,7 @@ import { AuthService } from '../../auth/auth.service';
 import { HttpParams } from '@angular/common/http';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Router, RouterLink } from '@angular/router'; // Import Router
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-field-list',
@@ -15,56 +15,102 @@ import { Router, RouterLink } from '@angular/router'; // Import Router
   styles: `
     .field-list-container {
       max-width: 1200px;
-      margin: 2rem auto;
-      padding: 1rem;
+      margin: 0 auto;
+      padding: 2rem;
     }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .page-header h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      font-size: 1.1rem;
+      color: #6b7280;
+    }
+
+    /* Filter Section */
     .filter-section {
       display: flex;
       gap: 1rem;
       margin-bottom: 2rem;
       flex-wrap: wrap;
-    }
-    .field-card {
-      background-color: #fff;
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
+      background: #f9fafb;
       padding: 1.5rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      position: relative; /* For favorite button positioning */
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
     }
-    .field-card h3 {
-      color: var(--color-primary);
-      margin-bottom: 0.5rem;
-    }
-    .field-card p {
-      margin-bottom: 0.5rem;
-    }
-    .search-input, .filter-select {
-      padding: 0.5rem;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
+
+    .search-input,
+    .filter-select {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
       font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
     }
-    .pagination {
+
+    .search-input:focus,
+    .filter-select:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-input::placeholder {
+      color: #9ca3af;
+    }
+
+    /* Results Info */
+    .results-info {
       display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding: 0 0.5rem;
     }
-    .pagination button {
-      background-color: var(--color-primary);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.25rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
+
+    .results-count {
+      font-size: 0.95rem;
+      color: #6b7280;
     }
-    .pagination button:disabled {
-      background-color: var(--gray-400);
-      cursor: not-allowed;
+
+    .results-count strong {
+      color: #1f2937;
+      font-weight: 600;
     }
+
+    /* Field Cards */
+    .fields-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .field-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .field-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
     .favorite-button {
       position: absolute;
       top: 1rem;
@@ -73,10 +119,226 @@ import { Router, RouterLink } from '@angular/router'; // Import Router
       border: none;
       font-size: 1.5rem;
       cursor: pointer;
-      color: #ccc; /* Default color */
+      transition: transform 0.2s ease;
+      padding: 0.25rem;
+      line-height: 1;
     }
+
+    .favorite-button:hover {
+      transform: scale(1.2);
+    }
+
+    .favorite-button:not(.favorited) {
+      filter: grayscale(100%);
+      opacity: 0.5;
+    }
+
     .favorite-button.favorited {
-      color: var(--color-accent); /* Red for favorited */
+      animation: heartBeat 0.3s ease;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.3); }
+      50% { transform: scale(1.1); }
+    }
+
+    .field-card h3 {
+      color: #2563eb;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      padding-right: 3rem;
+    }
+
+    .field-card h3:hover {
+      text-decoration: underline;
+    }
+
+    .field-description {
+      color: #4b5563;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .field-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .meta-item strong {
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .meta-badge {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .field-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      background: #f3f4f6;
+      color: #4b5563;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+    }
+
+    .view-details-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .view-details-link:hover {
+      color: #1e40af;
+    }
+
+    .view-details-link::after {
+      content: '→';
+      transition: transform 0.3s ease;
+    }
+
+    .view-details-link:hover::after {
+      transform: translateX(4px);
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pagination button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      background: #1e40af;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+    }
+
+    .pagination button:disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .pagination span {
+      font-weight: 500;
+      color: #4b5563;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    /* Loading & Error States */
+    .loading-state,
+    .error-state,
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .loading-state p {
+      color: #6b7280;
+      font-size: 1.1rem;
+    }
+
+    .error-state {
+      color: #dc2626;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 2rem;
+    }
+
+    .empty-state {
+      background: #f9fafb;
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 3rem;
+    }
+
+    .empty-state p {
+      color: #6b7280;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .field-list-container {
+        padding: 1rem;
+      }
+
+      .page-header h2 {
+        font-size: 2rem;
+      }
+
+      .filter-section {
+        flex-direction: column;
+      }
+
+      .search-input,
+      .filter-select {
+        width: 100%;
+      }
+
+      .results-info {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+
+      .field-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .pagination {
+        flex-wrap: wrap;
+      }
     }
   `,
 })
@@ -86,7 +348,7 @@ export class FieldList implements OnInit {
   private router = inject(Router);
   
   fields: Field[] = [];
-  favorites: Favorite[] = []; // Store user's favorites
+  favorites: Favorite[] = [];
   loading: boolean = true;
   error: string | null = null;
   
@@ -129,20 +391,18 @@ export class FieldList implements OnInit {
     params = params.set('page', this.currentPage.toString());
     params = params.set('page_size', this.pageSize.toString());
 
-    // Fetch fields first
     this.catalogService.getFields(params).subscribe({
       next: (response: PaginatedResponse<Field>) => {
         this.fields = response.results;
         this.totalItems = response.count;
         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
         this.loading = false;
-        // Then, if authenticated, fetch favorites to update status
         if (this.authService.isAuthenticatedSubject.value) {
           this.loadFavorites();
         }
       },
       error: (err) => {
-        this.error = 'Failed to load academic fields.';
+        this.error = 'Impossible de charger les filières académiques.';
         this.loading = false;
         console.error(err);
       }
@@ -172,10 +432,6 @@ export class FieldList implements OnInit {
     });
   }
 
-  isFieldFavorited(fieldId: number): boolean {
-    return this.favorites.some(fav => fav.field === fieldId);
-  }
-
   toggleFavorite(field: Field): void {
     if (!this.authService.isAuthenticatedSubject.value) {
       alert('Veuillez vous connecter pour ajouter des filières aux favoris.');
@@ -184,12 +440,10 @@ export class FieldList implements OnInit {
     }
 
     if (field.isFavorited) {
-      // Remove from favorites
       if (field.favoriteId) {
         this.catalogService.removeFavorite(field.favoriteId).subscribe({
           next: () => {
-            alert('Filière retirée des favoris !');
-            this.loadFavorites(); // Reload favorites to update UI
+            this.loadFavorites();
           },
           error: (err) => {
             console.error('Erreur lors de la suppression des favoris', err);
@@ -198,15 +452,13 @@ export class FieldList implements OnInit {
         });
       }
     } else {
-      // Add to favorites
       this.catalogService.addFavorite(field.id).subscribe({
         next: () => {
-          alert('Filière ajoutée aux favoris !');
-          this.loadFavorites(); // Reload favorites to update UI
+          this.loadFavorites();
         },
         error: (err) => {
           console.error('Erreur lors de l\'ajout aux favoris', err);
-          alert('Échec de l\'ajout aux favoris. Peut-être déjà dans vos favoris ?');
+          alert('Échec de l\'ajout aux favoris.');
         }
       });
     }
@@ -216,6 +468,7 @@ export class FieldList implements OnInit {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.loadFields();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -223,6 +476,7 @@ export class FieldList implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.loadFields();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 }

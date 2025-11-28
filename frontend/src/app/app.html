@@ -1,12 +1,55 @@
 <header class="app-header">
-    <nav>
-        <a routerLink="/" class="logo">ENSPD Orientation</a>
-        <div class="nav-links">
-            <a routerLink="/catalog">Catalogue</a>
-            <a routerLink="/student">Espace Étudiant</a>
-            <a routerLink="/admin">Admin</a>
-            <a routerLink="/auth/login">Connexion</a>
-            <a routerLink="/auth/register">Inscription</a>
+    <nav class="nav-container">
+        <a routerLink="/" class="logo" (click)="closeMobileMenu()">
+            <span class="logo-icon">🎓</span>
+            <span class="logo-text">ENSPD Orientation</span>
+        </a>
+        
+        <!-- Bouton hamburger pour mobile -->
+        <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" [class.active]="mobileMenuOpen">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="nav-links" [class.mobile-open]="mobileMenuOpen">
+            <a routerLink="/catalog" routerLinkActive="active" (click)="closeMobileMenu()">
+                <span class="nav-icon">📚</span>
+                Catalogue
+            </a>
+            <a routerLink="/student" routerLinkActive="active" (click)="closeMobileMenu()">
+                <span class="nav-icon">👨‍🎓</span>
+                Espace Étudiant
+            </a>
+            <a routerLink="/admin" routerLinkActive="active" (click)="closeMobileMenu()">
+                <span class="nav-icon">⚙️</span>
+                Admin
+            </a>
+
+            <div class="nav-divider"></div>
+
+            <!-- Affichage conditionnel basé sur l'authentification -->
+            <ng-container *ngIf="!isAuthenticated">
+                <a routerLink="/auth/login" routerLinkActive="active" class="auth-link" (click)="closeMobileMenu()">
+                    <span class="nav-icon">🔑</span>
+                    Connexion
+                </a>
+                <a routerLink="/auth/register" routerLinkActive="active" class="btn-register" (click)="closeMobileMenu()">
+                    <span class="nav-icon">✨</span>
+                    Inscription
+                </a>
+            </ng-container>
+
+            <ng-container *ngIf="isAuthenticated">
+                <div class="user-info">
+                    <span class="user-icon">👤</span>
+                    <span class="user-name">{{ userFirstName }}</span>
+                </div>
+                <button class="btn-logout" (click)="logout()">
+                    <span class="nav-icon">🚪</span>
+                    Déconnexion
+                </button>
+            </ng-container>
         </div>
     </nav>
 </header>
@@ -16,5 +59,23 @@
 </main>
 
 <footer class="app-footer">
-    <p>&copy; {{ currentYear }} ENSPD Orientation. Tous droits réservés.</p>
+    <div class="footer-content">
+        <div class="footer-section">
+            <h4>ENSPD Orientation</h4>
+            <p>Votre partenaire pour une orientation académique réussie</p>
+        </div>
+        <div class="footer-section">
+            <h4>Liens rapides</h4>
+            <a routerLink="/catalog">Catalogue des filières</a>
+            <a routerLink="/student">Espace Étudiant</a>
+        </div>
+        <div class="footer-section">
+            <h4>Contact</h4>
+            <p>📧 contact@enspd.com</p>
+            <p>📞 +33 1 23 45 67 89</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; {{ currentYear }} ENSPD Orientation. Tous droits réservés.</p>
+    </div>
 </footer>

@@ -7,6 +7,8 @@ from .views import (
     OrientationTestCompleteView,
     OrientationTestResultView,
     UserOrientationTestListView,
+    TestResponseListView,
+    # OrientationTestNew,
 )
 
 urlpatterns = [
@@ -17,4 +19,6 @@ urlpatterns = [
     path('tests/<int:test_id>/complete/', OrientationTestCompleteView.as_view(), name='test-complete'),
     path('tests/<int:pk>/result/', OrientationTestResultView.as_view(), name='test-result'),
     path('my-tests/', UserOrientationTestListView.as_view(), name='my-tests-list'),
+    path('tests/<int:test_id>/responses/', TestResponseListView.as_view(), name='test-responses-list'),
+    # path('tests/new', OrientationTestNiew.as_view(), name='new-test');
 ]

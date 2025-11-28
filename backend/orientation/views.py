@@ -181,3 +181,14 @@ class UserOrientationTestListView(generics.ListAPIView):
     
     def get_queryset(self):
         return OrientationTest.objects.filter(user=self.request.user).order_by('-started_at')
+    
+class TestResponseListView(generics.ListAPIView):
+    serializer_class = TestResponseSerializer
+    permission_classes = [permissions.IsAuthenticated, IsStudent]
+
+    def get_queryset(self):
+        test_id = self.kwargs['test_id']
+        orientation_test = get_object_or_404(OrientationTest, pk=test_id, user=self.request.user)
+        return TestResponse.objects.filter(orientation_test=orientation_test)
+    
+# class OrientationTestNew()
