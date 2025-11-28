@@ -1,8 +1,9 @@
 [build]
   command = "ng build --configuration production"
-  publish = "dist/orientation-app"
+  publish = "dist/orientation-app/browser"
+
 
 [[redirects]]
   from = "/*"
-  to = "/browser/index.html"
+  to = "/index.html"
   status = 200
