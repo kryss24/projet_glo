@@ -120,6 +120,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200", # The origin for your Angular app
+    "https://projet-glo.vercel.app/"
 ]
 # Or, for more permissive settings during development:
 # CORS_ALLOW_ALL_ORIGINS = True
