@@ -14,7 +14,7 @@
       <h3>
         <a [routerLink]="['/catalog', favorite.field]">{{ favorite.field_name }}</a>
       </h3>
-      <button (click)="removeFavorite(favorite.id)" class="remove-button">Retirer</button>
+      <button (click)="removeFavorite(favorite.id!)" class="remove-button">Retirer</button>
     </div>
   </div>
 

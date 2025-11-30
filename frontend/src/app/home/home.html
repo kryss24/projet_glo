@@ -1,25 +1,177 @@
 <div class="home-container">
+  <!-- Hero Section -->
   <div class="hero-section">
-    <h1>Bienvenue sur la Plateforme d'Orientation de l'ENSPD</h1>
-    <p>Votre guide pour une carrière réussie. Découvrez les filières qui vous correspondent.</p>
-    <a routerLink="/student/test" class="cta-button">Commencer le Test d'Orientation</a>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-icon">🎓</span>
+        <span>Plateforme d'Orientation Académique</span>
+      </div>
+      <h1>Bienvenue sur la Plateforme d'Orientation de l'ENSPD</h1>
+      <p class="hero-description">
+        Découvrez votre voie professionnelle grâce à notre système d'orientation scientifique.
+        Notre test psychométrique vous aide à identifier les filières qui correspondent à vos compétences et aspirations.
+      </p>
+      <a routerLink="/student/test" class="cta-button">
+        <span>Commencer le Test d'Orientation</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+    <div class="hero-image">
+      <div class="illustration-card">
+        <div class="illustration-icon">📊</div>
+        <h3>Test Scientifique</h3>
+        <p>Basé sur des méthodes éprouvées</p>
+      </div>
+    </div>
   </div>
 
+  <!-- Statistics Section -->
+  <div class="stats-section">
+    <div class="stat-card">
+      <div class="stat-number">5000+</div>
+      <div class="stat-label">Étudiants Orientés</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">50+</div>
+      <div class="stat-label">Filières Disponibles</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">95%</div>
+      <div class="stat-label">Taux de Satisfaction</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">89%</div>
+      <div class="stat-label">Réussite Académique</div>
+    </div>
+  </div>
+
+  <!-- Process Section -->
+  <div class="process-section">
+    <h2>Comment Fonctionne Notre Système d'Orientation ?</h2>
+    <p class="section-subtitle">Un processus simple et scientifique en trois étapes</p>
+
+    <div class="process-steps">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <div class="step-icon">✓</div>
+        <h3>Passez le Test</h3>
+        <p>Répondez à notre questionnaire psychométrique basé sur des recherches en orientation professionnelle et psychologie cognitive.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <div class="step-icon">📈</div>
+        <h3>Analysez Vos Résultats</h3>
+        <p>Recevez une analyse détaillée de vos compétences, intérêts professionnels et traits de personnalité.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <div class="step-icon">🎯</div>
+        <h3>Explorez les Filières</h3>
+        <p>Découvrez les programmes académiques recommandés avec des informations complètes sur les débouchés professionnels.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features Section -->
   <div class="features-section">
-    <div class="feature-card">
-      <h3>Catalogue des Filières</h3>
-      <p>Explorez en détail les filières académiques disponibles à l'ENSPD et dans d'autres institutions.</p>
-      <a routerLink="/catalog">Voir le Catalogue</a>
+    <h2>Nos Services</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h3>Catalogue des Filières</h3>
+        <p>Explorez en détail les filières académiques disponibles à l'ENSPD et dans d'autres institutions partenaires.</p>
+        <ul class="feature-list">
+          <li>Descriptions complètes des programmes</li>
+          <li>Conditions d'admission</li>
+          <li>Perspectives de carrière</li>
+          <li>Témoignages d'étudiants</li>
+        </ul>
+        <a routerLink="/catalog" class="feature-link">Voir le Catalogue →</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <h3>Test d'Orientation</h3>
+        <p>Passez un test psychométrique scientifique pour identifier les filières qui correspondent à votre profil unique.</p>
+        <ul class="feature-list">
+          <li>Test basé sur la recherche scientifique</li>
+          <li>Résultats en temps réel</li>
+          <li>Recommandations personnalisées</li>
+          <li>Rapport détaillé téléchargeable</li>
+        </ul>
+        <a routerLink="/student/test" class="feature-link">Passer le Test →</a>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">👤</div>
+        <h3>Espace Personnalisé</h3>
+        <p>Accédez à votre tableau de bord personnel, consultez vos résultats et gérez vos filières favorites.</p>
+        <ul class="feature-list">
+          <li>Historique de vos tests</li>
+          <li>Filières sauvegardées</li>
+          <li>Suivi de vos candidatures</li>
+          <li>Ressources personnalisées</li>
+        </ul>
+        <a routerLink="/student" class="feature-link">Mon Espace →</a>
+      </div>
     </div>
-    <div class="feature-card">
-      <h3>Test d'Orientation</h3>
-      <p>Passez un test psychométrique pour identifier les filières qui correspondent à votre profil.</p>
-      <a routerLink="/student/test">Passer le Test</a>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div class="testimonials-section">
+    <h2>Témoignages d'Étudiants</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">
+          Le test m'a aidée à découvrir mes véritables aptitudes. J'ai choisi le génie informatique et je m'épanouis totalement dans cette filière.
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div>
+            <div class="author-name">Amina L.</div>
+            <div class="author-program">Génie Informatique - Promotion 2024</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">
+          Grâce à cette plateforme, j'ai pu comparer objectivement différentes options et faire un choix éclairé pour mon avenir professionnel.
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">K</div>
+          <div>
+            <div class="author-name">Karim B.</div>
+            <div class="author-program">Management - Promotion 2023</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-icon">"</div>
+        <p class="testimonial-text">
+          Un outil indispensable pour tout étudiant. Les résultats sont précis et les recommandations très pertinentes.
+        </p>
+        <div class="testimonial-author">
+          <div class="author-avatar">S</div>
+          <div>
+            <div class="author-name">Sarah M.</div>
+            <div class="author-program">Architecture - Promotion 2024</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="feature-card">
-      <h3>Espace Personnalisé</h3>
-      <p>Accédez à votre tableau de bord, consultez vos résultats et gérez vos filières favorites.</p>
-      <a routerLink="/student">Mon Espace</a>
-    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="cta-section">
+    <h2>Prêt à Découvrir Votre Voie ?</h2>
+    <p>Commencez votre test d'orientation dès maintenant et recevez vos résultats personnalisés.</p>
+    <a routerLink="/student/test" class="cta-button-large">
+      Démarrer le Test Gratuit
+      <span class="arrow">→</span>
+    </a>
   </div>
 </div>

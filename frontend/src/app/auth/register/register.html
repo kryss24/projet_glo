@@ -1,1 +1,60 @@
-<p>register works!</p>
+<div class="auth-container">
+  <h2 class="auth-title">Créer un Compte</h2>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <div class="form-group">
+      <label for="username">Nom d'utilisateur</label>
+      <input type="text" id="username" formControlName="username" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" formControlName="email" required>
+    </div>
+
+    <div class="form-group">
+      <label for="first_name">Prénom</label>
+      <input type="text" id="first_name" formControlName="first_name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="last_name">Nom</label>
+      <input type="text" id="last_name" formControlName="last_name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input type="password" id="password" formControlName="password" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password2">Confirmer le mot de passe</label>
+      <input type="password" id="password2" formControlName="password2" required>
+      <div *ngIf="registerForm.errors?.['mismatch'] && registerForm.get('password2')?.touched" class="error-message">
+        Les mots de passe ne correspondent pas.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="role">Je suis un :</label>
+      <select id="role" formControlName="role">
+        <option value="student">Étudiant</option>
+        <option value="advisor">Conseiller</option>
+      </select>
+    </div>
+    
+    <button type="submit" class="submit-button" [disabled]="loading || registerForm.invalid">
+      {{ loading ? 'Création en cours...' : 'Créer mon compte' }}
+    </button>
+  </form>
+
+  <div class="auth-links">
+    <p>
+      Déjà un compte ? <a routerLink="/auth/login">Connectez-vous</a>
+    </p>
+  </div>
+</div>

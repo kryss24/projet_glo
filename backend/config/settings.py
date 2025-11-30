@@ -26,9 +26,11 @@ SECRET_KEY = 'django-insecure-gi$eim$t(t2a*0&j2paw&$p!lc)ga$6vz#f$yjtyncr17*6a&@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-FRONTEND_URL = 'http://localhost:4200' # Default for local Angular dev
+FRONTEND_URL = 'https://projet-glo.vercel.app' # Default for local Angular dev
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+IS_RENDER = os.getenv("RENDER", False)
+
 
 
 # Application definition
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'core',
     'django_filters',
     'drf_spectacular', # New
+    'corsheaders', # New
 ]
 
 SPECTACULAR_SETTINGS = {
@@ -105,6 +108,7 @@ SIMPLE_JWT = {
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # New
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -113,6 +117,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200", # The origin for your Angular app
+    "https://projet-glo.vercel.app"
+]
+# Or, for more permissive settings during development:
+# CORS_ALLOW_ALL_ORIGINS = True
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -192,6 +204,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
@@ -202,55 +215,27 @@ LOGGING = {
             'style': '{',
         },
     },
+
     'handlers': {
         'console': {
-            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs/django.log',
-            'maxBytes': 1024 * 1024 * 5,  # 5 MB
-            'backupCount': 5,
-            'formatter': 'verbose',
+            'formatter': 'verbose',  # Changé de 'simple' à 'verbose'
         },
     },
+
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'INFO',
-            'propagate': True,
         },
-        'django.request': {
-            'handlers': ['file'],
+        'django.request': {  # NOUVEAU - pour capturer les erreurs 500
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': False,
         },
-        'accounts': { # Logger for your custom app
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'catalog': { # Logger for your custom app
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'orientation': { # Logger for your custom app
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'drf_spectacular': {
-            'handlers': ['console'],
-            'level': 'WARNING',
-            'propagate': False,
-        },
     },
-    'root': {
-        'handlers': ['console', 'file'],
-        'level': 'DEBUG',
+    'root': {  # NOUVEAU - pour capturer toutes les erreurs
+        'handlers': ['console'],
+        'level': 'ERROR',
     },
 }

@@ -1,54 +1,139 @@
 <div class="field-detail-container">
-  <div *ngIf="loading" class="text-center">
-    <p>Chargement des détails de la filière...</p>
+  <!-- Back Button -->
+  <a routerLink="/catalog" class="back-button">
+    Retour au catalogue
+  </a>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <p>⏳ Chargement des détails de la filière...</p>
   </div>
 
-  <div *ngIf="error" class="text-red-500 text-center">
-    <p>{{ error }}</p>
+  <!-- Error State -->
+  <div *ngIf="error" class="error-state">
+    <p>❌ {{ error }}</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Redirection vers le catalogue...</p>
   </div>
 
+  <!-- Field Details -->
   <div *ngIf="field && !loading">
+    <!-- Header Section -->
     <div class="field-header">
       <h2>{{ field.name }}</h2>
+      <p class="field-subtitle">Formation académique de {{ field.duration_years }} ans</p>
+      
       <button 
         *ngIf="authService.isAuthenticatedSubject.value" 
         (click)="toggleFavorite()" 
         class="favorite-button"
-        [class.favorited]="field.isFavorited">
+        [class.favorited]="field.isFavorited"
+        [title]="field.isFavorited ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+      >
         {{ field.isFavorited ? '❤️' : '🤍' }}
       </button>
     </div>
 
-    <div class="field-info">
-      <p><strong>Description:</strong> {{ field.description }}</p>
-      <p><strong>Durée d'études:</strong> {{ field.duration_years }} ans</p>
-      <p><strong>Débouchés professionnels:</strong>
-        <span *ngFor="let career of field.career_opportunities; let i = index">
-          {{ career }}{{ i < field.career_opportunities.length - 1 ? ', ' : '' }}
-        </span>
-      </p>
-      <p><strong>Compétences requises:</strong>
-        <span *ngFor="let skill of field.required_skills; let i = index">
-          {{ skill }}{{ i < field.required_skills.length - 1 ? ', ' : '' }}
-        </span>
-      </p>
-      <p *ngIf="field.admission_criteria"><strong>Critères d'admission:</strong> {{ field.admission_criteria }}</p>
-      <p *ngIf="field.tuition_fees_min && field.tuition_fees_max">
-        <strong>Frais de scolarité:</strong> {{ field.tuition_fees_min }} - {{ field.tuition_fees_max }} XAF
-      </p>
-    </div>
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-value">{{ field.duration_years }} ans</div>
+        <div class="stat-label">Durée d'études</div>
+      </div>
 
-    <h3 class="mt-4 mb-3">Établissements proposant cette formation:</h3>
-    <div *ngIf="field.institutions && field.institutions.length > 0">
-      <div *ngFor="let institution of field.institutions" class="institution-card">
-        <h4>{{ institution.name }}</h4>
-        <p><strong>Ville:</strong> {{ institution.city }}</p>
-        <p><strong>Type:</strong> {{ institution.type === 'public' ? 'Public' : 'Privé' }}</p>
-        <p *ngIf="institution.description"><strong>Description:</strong> {{ institution.description }}</p>
+      <div class="stat-card" *ngIf="field.required_skills && field.required_skills.length > 0">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value">{{ field.required_skills.length }}</div>
+        <div class="stat-label">Compétences requises</div>
+      </div>
+
+      <div class="stat-card" *ngIf="field.career_opportunities && field.career_opportunities.length > 0">
+        <div class="stat-icon">💼</div>
+        <div class="stat-value">{{ field.career_opportunities.length }}</div>
+        <div class="stat-label">Débouchés</div>
+      </div>
+
+      <div class="stat-card" *ngIf="field.institutions && field.institutions.length > 0">
+        <div class="stat-icon">🏫</div>
+        <div class="stat-value">{{ field.institutions.length }}</div>
+        <div class="stat-label">Établissements</div>
       </div>
     </div>
-    <div *ngIf="!field.institutions || field.institutions.length === 0">
-      <p>Aucun établissement listé pour cette filière pour le moment.</p>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+      <!-- Description Section -->
+      <div class="content-section">
+        <h3 class="section-title">📖 Description</h3>
+        <p class="description-text">{{ field.description }}</p>
+      </div>
+
+      <!-- Additional Info Section -->
+      <div class="content-section">
+        <h3 class="section-title">ℹ️ Informations complémentaires</h3>
+        <div class="info-list">
+          <div class="info-item" *ngIf="field.admission_criteria">
+            <div class="info-label">Critères d'admission</div>
+            <div class="info-value">{{ field.admission_criteria }}</div>
+          </div>
+
+          <div class="info-item" *ngIf="field.tuition_fees_min && field.tuition_fees_max">
+            <div class="info-label">Frais de scolarité</div>
+            <div class="info-value">
+              {{ field.tuition_fees_min | number:'1.0-0' }} - {{ field.tuition_fees_max | number:'1.0-0' }} FCFA
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">Durée des études</div>
+            <div class="info-value">{{ field.duration_years }} ans</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills Section -->
+      <div class="content-section" *ngIf="field.required_skills && field.required_skills.length > 0">
+        <h3 class="section-title">🎯 Compétences requises</h3>
+        <div class="tags-container">
+          <span class="tag skill-tag" *ngFor="let skill of field.required_skills">
+            ✓ {{ skill }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Career Opportunities Section -->
+      <div class="content-section" *ngIf="field.career_opportunities && field.career_opportunities.length > 0">
+        <h3 class="section-title">💼 Débouchés professionnels</h3>
+        <div class="tags-container">
+          <span class="tag career-tag" *ngFor="let career of field.career_opportunities">
+            {{ career }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Institutions Section -->
+      <div class="content-section">
+        <h3 class="section-title">🏫 Établissements proposant cette formation</h3>
+        
+        <div *ngIf="field.institutions && field.institutions.length > 0" class="institutions-grid">
+          <div *ngFor="let institution of field.institutions" class="institution-card">
+            <div class="institution-header">
+              <h4>{{ institution.name }}</h4>
+              <span class="institution-type" [class.public]="institution.type === 'public'" [class.private]="institution.type === 'private'">
+                {{ institution.type === 'public' ? 'Public' : 'Privé' }}
+              </span>
+            </div>
+
+            <div class="institution-description" *ngIf="institution.description">
+              {{ institution.description }}
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!field.institutions || field.institutions.length === 0" class="empty-state">
+          <p>🏫 Aucun établissement listé pour cette filière pour le moment</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
